@@ -1,62 +1,112 @@
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
 public enum TransitionParameters
 {
-    Idle,Walk,Run
+    Idle,
+    Walk,
+    Run
 }
 
 public class CharacterController : MonoBehaviour
 {
     public float moveSpeed = 5f;
     public float rotationSpeed = 10f;
-    
-    private Joystick _joystick; 
+    public float gravity = 9.8f; // Yerçekimi kuvveti
+
+    private Joystick _joystick;
     private Animator _animator;
+    private Rigidbody _rb;
+    private bool _isGrounded;
+
     private void Start()
     {
         _joystick = FindObjectOfType<Joystick>();
         _animator = GetComponent<Animator>();
+        _rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         MoveCharacter();
     }
-    
 
     public void MoveCharacter()
     {
-        var horizontalInput = _joystick.Horizontal;
-        var verticalInput = _joystick.Vertical;
+        float horizontalInput = -_joystick.Horizontal;
+        float verticalInput = -_joystick.Vertical;
 
-        var moveDirection = new Vector3(-horizontalInput, -0f, -verticalInput);
+        Vector3 moveDirection = new Vector3(horizontalInput, 0f, verticalInput);
         moveDirection.Normalize();
 
         if (moveDirection != Vector3.zero)
         {
             Quaternion toRotation = Quaternion.LookRotation(moveDirection, Vector3.up);
-            transform.DORotateQuaternion(toRotation, rotationSpeed * Time.deltaTime);
+            _rb.rotation = Quaternion.Lerp(_rb.rotation,toRotation,rotationSpeed*Time.deltaTime);
+            //transform.DORotateQuaternion(toRotation, rotationSpeed * Time.deltaTime);
         }
-
-        Vector3 targetPosition = transform.position + moveDirection * moveSpeed;
-        transform.DOMove(targetPosition, 0.1f).SetEase(Ease.Linear);
-
         
+        Vector3 velocity = moveDirection * moveSpeed;
+        velocity.y = _rb.velocity.y; 
+        _rb.velocity = velocity;
+
+        // Yerçekimi uygulama
+        ApplyGravity();
+
         if (moveDirection != Vector3.zero)
         {
-            //PlayAnim(TransitionParameters.Run.ToString(),0.1f);
+            //PlayAnim(TransitionParameters.Run.ToString(), 0.1f);
         }
         else
         {
-            //PlayAnim(TransitionParameters.Idle.ToString(),0.1f);
+           // PlayAnim(TransitionParameters.Idle.ToString(), 0.1f);
         }
     }
 
-    public void PlayAnim(string targetAnimation,float animationTransitionSpeed)
+    public void PlayAnim(string targetAnimation, float animationTransitionSpeed)
     {
-        if(_animator.IsInTransition(0)) {return;}
+        if (_animator.IsInTransition(0)) { return; }
         _animator.CrossFade(targetAnimation, animationTransitionSpeed);
+    }
+
+    private void ApplyGravity()
+    {
+        RaycastHit hit;
+        _isGrounded = Physics.Raycast(transform.position, -Vector3.up, out hit, 0.1f);
+        
+        if (!_isGrounded)
+        {
+            _rb.AddForce(Vector3.down * gravity);
+        }
+    }
+    
+    private void ApplyForceWithDotween(Rigidbody targetRigidbody, Vector3 forceDirection)
+    {
+        targetRigidbody.DOMove(targetRigidbody.transform.position + forceDirection * 5f, .2f).SetEase(Ease.InSine);
+    }
+    
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Rigidbody otherRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+            if (otherRigidbody != null)
+            {
+                Vector3 forceDirection = otherRigidbody.transform.position - transform.position;
+                forceDirection.Normalize();
+                ApplyForceWithDotween(otherRigidbody, forceDirection);
+            }
+        }
+    }
+    
+    private IEnumerator OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.layer == 4)
+        {
+            yield return new WaitForSeconds(0.5f);
+            Destroy(this.gameObject);
+        }
     }
 }
