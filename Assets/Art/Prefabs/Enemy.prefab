@@ -13,7 +13,10 @@ GameObject:
   - component: {fileID: 3497831677049143013}
   - component: {fileID: 1875402161462401346}
   - component: {fileID: -6182797473910161783}
+  - component: {fileID: 4465655048760234602}
   - component: {fileID: 6337191027732163073}
+  - component: {fileID: 2119984391548630643}
+  - component: {fileID: 7535461049022531601}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -115,6 +118,18 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &4465655048760234602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695885301553500855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0bf4999ad449e5a08fc032d10ac02e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6337191027732163073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,15 +142,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eeb22f4a4c15354ca2ceedea4465053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerLayer:
+  detectionRadius: 10
+  candyLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  enemyLayer:
     serializedVersion: 2
     m_Bits: 64
-  moveSpeed: 5
-  detectionRadius: 25
-  minDistanceToPlayer: 2
-  collisionForce: 2
+--- !u!114 &2119984391548630643
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695885301553500855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bef7001af68f4d29b8e2917bd13034d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 6
+--- !u!114 &7535461049022531601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 695885301553500855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b5f89b875e4ed1b4445e880909689d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   gravity: 9.8
-  groundCheckDistance: 0.1
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 128
