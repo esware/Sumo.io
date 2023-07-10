@@ -1,4 +1,6 @@
-﻿namespace Dev.Scripts
+﻿using Managers;
+
+namespace Dev.Scripts
 {
     using UnityEngine;
     using System.Collections.Generic;
@@ -7,19 +9,27 @@
     {
         public GameObject candyPrefab;
         public int initialPoolSize = 10;
+        
+        public List<GameObject> candyPool = new List<GameObject>();
+        private static CandyPool instance; 
 
-        public List<GameObject> candyPool;
-
-        private void Start()
+        private void Awake()
         {
-            candyPool = new List<GameObject>();
-            CreateInitialPool();
-            SignUpEvents();
+            if (instance == null)
+            {
+                instance = this;
+                CreateInitialPool();
+                SignUpEvents();
+            }
+            else
+            {
+                Destroy(gameObject); 
+            }
         }
 
         private void SignUpEvents()
         {
-            GameEvents.onSugarConsumed += ReturnCandyToPool;
+            GameEvents.collectableEvent += ReturnCandyToPool;
         }
 
         private void CreateInitialPool()
@@ -47,11 +57,11 @@
             return null;
         }
 
-        public void ReturnCandyToPool(GameObject candy)
+        private void ReturnCandyToPool(GameObject candy)
         {
             candy.SetActive(false);
             ObjectSpawner spawner = new ObjectSpawner();
-            spawner._spawnedPositions.Remove(candy.gameObject.transform.position);
+            spawner.spawnedPositions.Remove(candy.gameObject.transform.position);
         }
     }
 

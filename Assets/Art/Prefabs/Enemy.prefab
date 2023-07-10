@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eeb22f4a4c15354ca2ceedea4465053, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  detectionRadius: 10
+  detectionRadius: 15
   candyLayer:
     serializedVersion: 2
     m_Bits: 256
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bef7001af68f4d29b8e2917bd13034d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 6
+  moveSpeed: 5
 --- !u!114 &7535461049022531601
 MonoBehaviour:
   m_ObjectHideFlags: 0

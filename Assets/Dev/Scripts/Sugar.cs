@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Managers;
 using UnityEngine;
 
 public class Sugar : MonoBehaviour
@@ -27,7 +28,7 @@ public class Sugar : MonoBehaviour
     {
         if (other.CompareTag("Player") || other.CompareTag("Enemy"))
         {
-            GameEvents.onSugarConsumed?.Invoke(this.gameObject);
+            GameEvents.collectableEvent?.Invoke(this.gameObject);
         }
     }
 }
