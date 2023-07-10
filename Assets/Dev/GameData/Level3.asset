@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Level3
   m_EditorClassIdentifier: 
   levelObject: {fileID: 5704663721476944569, guid: d06ea660f225a894eaa88ab140cb56ce, type: 3}
-  levelCompleteTime: 100
+  levelCompleteTime: 40
   numberOfEnemies: 8
   numberOfCandies: 5
